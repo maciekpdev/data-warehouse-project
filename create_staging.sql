@@ -15,9 +15,7 @@ CREATE TABLE stg_maddison (
     `value`         DOUBLE       NULL,
     CONSTRAINT pk_stg_maddison PRIMARY KEY (country_iso3, indicator_code, `year`),
     CONSTRAINT chk_stg_maddison_year CHECK (`year` BETWEEN 1900 AND 2100)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci;
+);
 
 DROP TABLE IF EXISTS stg_wdi;
 
@@ -30,9 +28,7 @@ CREATE TABLE stg_wdi (
     `value`         DOUBLE       NULL,
     CONSTRAINT pk_stg_wdi PRIMARY KEY (country_iso3, indicator_code, `year`),
     CONSTRAINT chk_stg_wdi_year CHECK (`year` BETWEEN 1900 AND 2100)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci;
+);
 
 DROP TABLE IF EXISTS stg_events;
 
@@ -47,6 +43,16 @@ CREATE TABLE stg_events (
     CONSTRAINT pk_stg_events PRIMARY KEY (event_id),
     CONSTRAINT chk_stg_events_year CHECK (`year` BETWEEN 1900 AND 2100),
     INDEX idx_stg_events_country_year (country_iso3, `year`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci;
+);
+
+DROP TABLE IF EXISTS stg_country_mapping;
+  
+CREATE TABLE stg_country_mapping (
+    iso3_code     CHAR(3)     NOT NULL,
+    country_name  VARCHAR(20) NOT NULL,
+    country_group VARCHAR(30) NOT NULL,
+    CONSTRAINT pk_stg_country_mapping PRIMARY KEY (iso3_code)
+);
+  
+  
+ 

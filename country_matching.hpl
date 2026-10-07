@@ -234,7 +234,7 @@ GROUP BY country_iso3, country_name;</sql>
     <unique_rows>N</unique_rows>
     <compress>N</compress>
     <compress_variables/>
-    <distribute>Y</distribute>
+    <distribute>N</distribute>
     <copies>1</copies>
     <GUI>
       <xloc>848</xloc>
@@ -333,6 +333,58 @@ GROUP BY country_iso3, country_name;</sql>
     </partitioning>
     <attributes/>
   </transform>
+  <transform>
+    <type>TableOutput</type>
+    <name>CountryMappingTableOutput</name>
+    <connection>StagingDatabase</connection>
+    <schema>aid_staging</schema>
+    <table>stg_country_mapping</table>
+    <commit>1000</commit>
+    <truncate>Y</truncate>
+    <only_when_have_rows>N</only_when_have_rows>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <specify_fields>Y</specify_fields>
+    <auto_update_table_structure>N</auto_update_table_structure>
+    <always_drop_and_recreate>N</always_drop_and_recreate>
+    <add_columns>N</add_columns>
+    <drop_columns>N</drop_columns>
+    <change_column_types>N</change_column_types>
+    <fields>
+      <field>
+        <stream_name>iso3_code</stream_name>
+        <column_name>iso3_code</column_name>
+      </field>
+      <field>
+        <stream_name>country_name</stream_name>
+        <column_name>country_name</column_name>
+      </field>
+      <field>
+        <stream_name>country_group</stream_name>
+        <column_name>country_group</column_name>
+      </field>
+    </fields>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>1008</xloc>
+      <yloc>192</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
+  </transform>
   <order>
     <hop>
       <from>MaddisonCountryTableInput</from>
@@ -362,6 +414,11 @@ GROUP BY country_iso3, country_name;</sql>
     <hop>
       <from>Sort rows</from>
       <to>CountryMappingFileOutput</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Sort rows</from>
+      <to>CountryMappingTableOutput</to>
       <enabled>Y</enabled>
     </hop>
   </order>
