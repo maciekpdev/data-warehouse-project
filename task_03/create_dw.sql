@@ -1,8 +1,8 @@
-CREATE DATABASE IF NOT EXISTS dw
+CREATE DATABASE IF NOT EXISTS aid_dw
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
  
-USE dw;
+USE aid_dw;
  
 DROP TABLE IF EXISTS fact_economy;
 DROP TABLE IF EXISTS fact_society;
@@ -26,7 +26,7 @@ CREATE TABLE dim_time (
     `year`   SMALLINT     NOT NULL,
     decade   SMALLINT     GENERATED ALWAYS AS (`year` - MOD(`year`, 10)) STORED NOT NULL,
     CONSTRAINT primary_key_dim_time PRIMARY KEY (time_key),
-    CONSTRAINT unique_dim_time_year UNIQUE (`year`),
+    CONSTRAINT unique_dim_time_year UNIQUE (`year`)
 );
  
 CREATE TABLE dim_sector (
@@ -34,7 +34,6 @@ CREATE TABLE dim_sector (
     sector_code  VARCHAR(10)  NOT NULL,
     sector_name  VARCHAR(30)  NOT NULL,
     broad_sector VARCHAR(20)  NOT NULL,
-    is_additive  TINYINT(1)   NOT NULL DEFAULT 1,
     CONSTRAINT primary_key_dim_sector PRIMARY KEY (sector_key),
     CONSTRAINT unique_dim_sector_code UNIQUE (sector_code),
     CONSTRAINT check_dim_sector_broad CHECK (broad_sector IN ('Primary', 'Secondary', 'Tertiary'))
