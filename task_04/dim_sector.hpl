@@ -87,45 +87,36 @@
     <attributes/>
   </transform>
   <transform>
-    <type>TableOutput</type>
-    <name>Table output</name>
+    <type>InsertUpdate</type>
+    <name>DimSectorInsertUpdate</name>
     <connection>DwDatabase</connection>
-    <schema>aid_dw</schema>
-    <table>dim_sector</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <only_when_have_rows>N</only_when_have_rows>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <specify_fields>Y</specify_fields>
-    <auto_update_table_structure>N</auto_update_table_structure>
-    <always_drop_and_recreate>N</always_drop_and_recreate>
-    <add_columns>N</add_columns>
-    <drop_columns>N</drop_columns>
-    <change_column_types>N</change_column_types>
-    <fields>
-      <field>
-        <stream_name>sector_code</stream_name>
-        <column_name>sector_code</column_name>
-      </field>
-      <field>
-        <stream_name>sector_name</stream_name>
-        <column_name>sector_name</column_name>
-      </field>
-      <field>
-        <stream_name>broad_sector</stream_name>
-        <column_name>broad_sector</column_name>
-      </field>
-    </fields>
+    <commit>100</commit>
+    <update_bypassed>N</update_bypassed>
+    <lookup>
+      <schema>aid_dw</schema>
+      <table>dim_sector</table>
+      <key>
+        <name>sector_code</name>
+        <field>sector_code</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>sector_code</name>
+        <rename>sector_code</rename>
+        <update>N</update>
+      </value>
+      <value>
+        <name>sector_name</name>
+        <rename>sector_name</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>broad_sector</name>
+        <rename>broad_sector</rename>
+        <update>Y</update>
+      </value>
+    </lookup>
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
@@ -141,7 +132,7 @@
   <order>
     <hop>
       <from>SectorDataGrid</from>
-      <to>Table output</to>
+      <to>DimSectorInsertUpdate</to>
       <enabled>Y</enabled>
     </hop>
   </order>

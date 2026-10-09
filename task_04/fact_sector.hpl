@@ -16,10 +16,20 @@
   </info>
   <transform>
     <type>TableInput</type>
-    <name>StagingMaddisonTableInput</name>
+    <name>StagingWdiSectorTableInput</name>
     <sql>SELECT country_iso3, year, indicator_code, value
-FROM stg_maddison
-WHERE indicator_code IN ('gdppc', 'gdp');</sql>
+FROM stg_wdi
+WHERE indicator_code IN ('NV.AGR.TOTL.ZS',
+       'NV.AGR.TOTL.CD',
+       'SL.AGR.EMPL.ZS',
+       'NV.IND.TOTL.ZS',
+       'NV.IND.TOTL.CD',
+       'SL.IND.EMPL.ZS',
+       'NV.IND.MANF.ZS',
+       'NV.IND.MANF.CD',
+       'NV.SRV.TOTL.ZS',
+       'NV.SRV.TOTL.CD',
+       'SL.SRV.EMPL.ZS');</sql>
     <limit>0</limit>
     <execute_each_row>N</execute_each_row>
     <variables_active>N</variables_active>
@@ -29,8 +39,8 @@ WHERE indicator_code IN ('gdppc', 'gdp');</sql>
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
-      <xloc>176</xloc>
-      <yloc>224</yloc>
+      <xloc>144</xloc>
+      <yloc>320</yloc>
     </GUI>
     <partitioning>
       <method>none</method>
@@ -39,22 +49,148 @@ WHERE indicator_code IN ('gdppc', 'gdp');</sql>
     <attributes/>
   </transform>
   <transform>
-    <type>TableInput</type>
-    <name>StagingWdiTableInput</name>
-    <sql>SELECT country_iso3, year, indicator_code, value
-FROM stg_wdi
-WHERE indicator_code IN ('NY.GDP.MKTP.KD.ZG', 'NE.EXP.GNFS.ZS', 'NE.IMP.GNFS.ZS');</sql>
-    <limit>0</limit>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <connection>StagingDatabase</connection>
-    <lookup/>
-    <sql_from_file/>
+    <type>ValueMapper</type>
+    <name>MapSectorCode</name>
+    <field_to_use>indicator_code</field_to_use>
+    <target_field>sector_code</target_field>
+    <non_match_default>Unmapped</non_match_default>
+    <fields>
+      <field>
+        <source_value>NV.AGR.TOTL.ZS</source_value>
+        <target_value>AGR</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+      <field>
+        <source_value>NV.AGR.TOTL.CD</source_value>
+        <target_value>AGR</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+      <field>
+        <source_value>SL.AGR.EMPL.ZS</source_value>
+        <target_value>AGR</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+      <field>
+        <source_value>NV.IND.TOTL.ZS</source_value>
+        <target_value>IND</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+      <field>
+        <source_value>NV.IND.TOTL.CD</source_value>
+        <target_value>IND</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+      <field>
+        <source_value>SL.IND.EMPL.ZS</source_value>
+        <target_value>IND</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+      <field>
+        <source_value>NV.IND.MANF.ZS</source_value>
+        <target_value>MANF</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+      <field>
+        <source_value>NV.IND.MANF.CD</source_value>
+        <target_value>MANF</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+      <field>
+        <source_value>NV.SRV.TOTL.ZS</source_value>
+        <target_value>SRV</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+      <field>
+        <source_value>NV.SRV.TOTL.CD</source_value>
+        <target_value>SRV</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+      <field>
+        <source_value>SL.SRV.EMPL.ZS</source_value>
+        <target_value>SRV</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+    </fields>
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
-      <xloc>176</xloc>
-      <yloc>400</yloc>
+      <xloc>336</xloc>
+      <yloc>320</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
+  </transform>
+  <transform>
+    <type>ValueMapper</type>
+    <name>MapMeasure</name>
+    <field_to_use>indicator_code</field_to_use>
+    <target_field>measure</target_field>
+    <non_match_default>Unmapped</non_match_default>
+    <fields>
+      <field>
+        <source_value>NV.AGR.TOTL.ZS</source_value>
+        <target_value>value_added_pct_gdp</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+      <field>
+        <source_value>NV.AGR.TOTL.CD</source_value>
+        <target_value>value_added_usd</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+      <field>
+        <source_value>SL.AGR.EMPL.ZS</source_value>
+        <target_value>employment_pct</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+      <field>
+        <source_value>NV.IND.TOTL.ZS</source_value>
+        <target_value>value_added_pct_gdp</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+      <field>
+        <source_value>NV.IND.TOTL.CD</source_value>
+        <target_value>value_added_usd</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+      <field>
+        <source_value>SL.IND.EMPL.ZS</source_value>
+        <target_value>employment_pct</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+      <field>
+        <source_value>NV.IND.MANF.ZS</source_value>
+        <target_value>value_added_pct_gdp</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+      <field>
+        <source_value>NV.IND.MANF.CD</source_value>
+        <target_value>value_added_usd</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+      <field>
+        <source_value>NV.SRV.TOTL.ZS</source_value>
+        <target_value>value_added_pct_gdp</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+      <field>
+        <source_value>NV.SRV.TOTL.CD</source_value>
+        <target_value>value_added_usd</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+      <field>
+        <source_value>SL.SRV.EMPL.ZS</source_value>
+        <target_value>employment_pct</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+    </fields>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>528</xloc>
+      <yloc>320</yloc>
     </GUI>
     <partitioning>
       <method>none</method>
@@ -82,6 +218,14 @@ WHERE indicator_code IN ('NY.GDP.MKTP.KD.ZG', 'NE.EXP.GNFS.ZS', 'NE.IMP.GNFS.ZS'
         <collator_strength>0</collator_strength>
         <presorted>N</presorted>
       </field>
+      <field>
+        <name>sector_code</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
+      </field>
     </fields>
     <directory>${java.io.tmpdir}</directory>
     <sort_prefix>out</sort_prefix>
@@ -93,7 +237,7 @@ WHERE indicator_code IN ('NY.GDP.MKTP.KD.ZG', 'NE.EXP.GNFS.ZS', 'NE.IMP.GNFS.ZS'
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
-      <xloc>512</xloc>
+      <xloc>720</xloc>
       <yloc>320</yloc>
     </GUI>
     <partitioning>
@@ -112,13 +256,16 @@ WHERE indicator_code IN ('NY.GDP.MKTP.KD.ZG', 'NE.EXP.GNFS.ZS', 'NE.IMP.GNFS.ZS'
       <field>
         <name>year</name>
       </field>
+      <field>
+        <name>sector_code</name>
+      </field>
     </group>
-    <key_field>indicator_code</key_field>
+    <key_field>measure</key_field>
     <fields>
       <field>
         <field_name>value</field_name>
-        <key_value>gdppc</key_value>
-        <target_name>gdp_per_capita</target_name>
+        <key_value>value_added_pct_gdp</key_value>
+        <target_name>value_added_pct_gdp</target_name>
         <target_type>Number</target_type>
         <target_length>-1</target_length>
         <target_precision>-1</target_precision>
@@ -131,8 +278,8 @@ WHERE indicator_code IN ('NY.GDP.MKTP.KD.ZG', 'NE.EXP.GNFS.ZS', 'NE.IMP.GNFS.ZS'
       </field>
       <field>
         <field_name>value</field_name>
-        <key_value>gdp</key_value>
-        <target_name>gdp</target_name>
+        <key_value>value_added_usd</key_value>
+        <target_name>value_added_usd</target_name>
         <target_type>Number</target_type>
         <target_length>-1</target_length>
         <target_precision>-1</target_precision>
@@ -145,36 +292,8 @@ WHERE indicator_code IN ('NY.GDP.MKTP.KD.ZG', 'NE.EXP.GNFS.ZS', 'NE.IMP.GNFS.ZS'
       </field>
       <field>
         <field_name>value</field_name>
-        <key_value>NY.GDP.MKTP.KD.ZG</key_value>
-        <target_name>gdp_growth_pct</target_name>
-        <target_type>Number</target_type>
-        <target_length>-1</target_length>
-        <target_precision>-1</target_precision>
-        <target_currency_symbol/>
-        <target_decimal_symbol/>
-        <target_grouping_symbol/>
-        <target_null_string/>
-        <target_format/>
-        <target_aggregation_type>-</target_aggregation_type>
-      </field>
-      <field>
-        <field_name>value</field_name>
-        <key_value>NE.EXP.GNFS.ZS</key_value>
-        <target_name>exports_pct_gdp</target_name>
-        <target_type>Number</target_type>
-        <target_length>-1</target_length>
-        <target_precision>-1</target_precision>
-        <target_currency_symbol/>
-        <target_decimal_symbol/>
-        <target_grouping_symbol/>
-        <target_null_string/>
-        <target_format/>
-        <target_aggregation_type>-</target_aggregation_type>
-      </field>
-      <field>
-        <field_name>value</field_name>
-        <key_value>NE.IMP.GNFS.ZS</key_value>
-        <target_name>imports_pct_gdp</target_name>
+        <key_value>employment_pct</key_value>
+        <target_name>employment_pct</target_name>
         <target_type>Number</target_type>
         <target_length>-1</target_length>
         <target_precision>-1</target_precision>
@@ -189,7 +308,7 @@ WHERE indicator_code IN ('NY.GDP.MKTP.KD.ZG', 'NE.EXP.GNFS.ZS', 'NE.IMP.GNFS.ZS'
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
-      <xloc>800</xloc>
+      <xloc>912</xloc>
       <yloc>320</yloc>
     </GUI>
     <partitioning>
@@ -228,8 +347,8 @@ WHERE indicator_code IN ('NY.GDP.MKTP.KD.ZG', 'NE.EXP.GNFS.ZS', 'NE.IMP.GNFS.ZS'
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
-      <xloc>320</xloc>
-      <yloc>640</yloc>
+      <xloc>912</xloc>
+      <yloc>528</yloc>
     </GUI>
     <partitioning>
       <method>none</method>
@@ -239,7 +358,7 @@ WHERE indicator_code IN ('NY.GDP.MKTP.KD.ZG', 'NE.EXP.GNFS.ZS', 'NE.IMP.GNFS.ZS'
   </transform>
   <transform>
     <type>DBLookup</type>
-    <name>Database lookup</name>
+    <name>DimTimeKeyLookup</name>
     <connection>DwDatabase</connection>
     <cache>Y</cache>
     <cache_size>0</cache_size>
@@ -267,8 +386,47 @@ WHERE indicator_code IN ('NY.GDP.MKTP.KD.ZG', 'NE.EXP.GNFS.ZS', 'NE.IMP.GNFS.ZS'
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
-      <xloc>672</xloc>
-      <yloc>640</yloc>
+      <xloc>720</xloc>
+      <yloc>528</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
+  </transform>
+  <transform>
+    <type>DBLookup</type>
+    <name>DimSectorKeyLookup</name>
+    <connection>DwDatabase</connection>
+    <cache>Y</cache>
+    <cache_size>0</cache_size>
+    <cache_load_all>Y</cache_load_all>
+    <lookup>
+      <schema>aid_dw</schema>
+      <table>dim_sector</table>
+      <key>
+        <name>sector_code</name>
+        <name2/>
+        <condition>=</condition>
+        <field>sector_code</field>
+      </key>
+      <value>
+        <name>sector_key</name>
+        <rename/>
+        <default/>
+        <type>Integer</type>
+        <trim_type>none</trim_type>
+      </value>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+    </lookup>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>528</xloc>
+      <yloc>528</yloc>
     </GUI>
     <partitioning>
       <method>none</method>
@@ -293,31 +451,25 @@ WHERE indicator_code IN ('NY.GDP.MKTP.KD.ZG', 'NE.EXP.GNFS.ZS', 'NE.IMP.GNFS.ZS'
         <precision>-2</precision>
       </field>
       <field>
-        <name>gdp_per_capita</name>
+        <name>sector_key</name>
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
       </field>
       <field>
-        <name>gdp</name>
+        <name>value_added_pct_gdp</name>
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
       </field>
       <field>
-        <name>gdp_growth_pct</name>
+        <name>value_added_usd</name>
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
       </field>
       <field>
-        <name>exports_pct_gdp</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>
-      <field>
-        <name>imports_pct_gdp</name>
+        <name>employment_pct</name>
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
@@ -327,7 +479,7 @@ WHERE indicator_code IN ('NY.GDP.MKTP.KD.ZG', 'NE.EXP.GNFS.ZS', 'NE.IMP.GNFS.ZS'
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
-      <xloc>896</xloc>
+      <xloc>336</xloc>
       <yloc>528</yloc>
     </GUI>
     <partitioning>
@@ -338,10 +490,10 @@ WHERE indicator_code IN ('NY.GDP.MKTP.KD.ZG', 'NE.EXP.GNFS.ZS', 'NE.IMP.GNFS.ZS'
   </transform>
   <transform>
     <type>TableOutput</type>
-    <name>FactEconomyTableOutput</name>
+    <name>FactSectorTableOutput</name>
     <connection>DwDatabase</connection>
     <schema>aid_dw</schema>
-    <table>fact_economy</table>
+    <table>fact_sector</table>
     <commit>1000</commit>
     <truncate>Y</truncate>
     <only_when_have_rows>N</only_when_have_rows>
@@ -372,30 +524,26 @@ WHERE indicator_code IN ('NY.GDP.MKTP.KD.ZG', 'NE.EXP.GNFS.ZS', 'NE.IMP.GNFS.ZS'
         <column_name>time_key</column_name>
       </field>
       <field>
-        <stream_name>gdp_per_capita</stream_name>
-        <column_name>gdp_per_capita</column_name>
+        <stream_name>sector_key</stream_name>
+        <column_name>sector_key</column_name>
       </field>
       <field>
-        <stream_name>gdp</stream_name>
-        <column_name>gdp</column_name>
+        <stream_name>value_added_pct_gdp</stream_name>
+        <column_name>value_added_pct_gdp</column_name>
       </field>
       <field>
-        <stream_name>gdp_growth_pct</stream_name>
-        <column_name>gdp_growth_pct</column_name>
+        <stream_name>value_added_usd</stream_name>
+        <column_name>value_added_usd</column_name>
       </field>
       <field>
-        <stream_name>exports_pct_gdp</stream_name>
-        <column_name>exports_pct_gdp</column_name>
-      </field>
-      <field>
-        <stream_name>imports_pct_gdp</stream_name>
-        <column_name>imports_pct_gdp</column_name>
+        <stream_name>employment_pct</stream_name>
+        <column_name>employment_pct</column_name>
       </field>
     </fields>
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
-      <xloc>1120</xloc>
+      <xloc>144</xloc>
       <yloc>528</yloc>
     </GUI>
     <partitioning>
@@ -406,12 +554,17 @@ WHERE indicator_code IN ('NY.GDP.MKTP.KD.ZG', 'NE.EXP.GNFS.ZS', 'NE.IMP.GNFS.ZS'
   </transform>
   <order>
     <hop>
-      <from>StagingMaddisonTableInput</from>
-      <to>Sort rows</to>
+      <from>StagingWdiSectorTableInput</from>
+      <to>MapSectorCode</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>StagingWdiTableInput</from>
+      <from>MapSectorCode</from>
+      <to>MapMeasure</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>MapMeasure</from>
       <to>Sort rows</to>
       <enabled>Y</enabled>
     </hop>
@@ -427,17 +580,22 @@ WHERE indicator_code IN ('NY.GDP.MKTP.KD.ZG', 'NE.EXP.GNFS.ZS', 'NE.IMP.GNFS.ZS'
     </hop>
     <hop>
       <from>DimCountryKeyLookup</from>
-      <to>Database lookup</to>
+      <to>DimTimeKeyLookup</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Database lookup</from>
+      <from>DimTimeKeyLookup</from>
+      <to>DimSectorKeyLookup</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>DimSectorKeyLookup</from>
       <to>Select values</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>Select values</from>
-      <to>FactEconomyTableOutput</to>
+      <to>FactSectorTableOutput</to>
       <enabled>Y</enabled>
     </hop>
   </order>
